@@ -1,23 +1,10 @@
 {
-  "name": "node-react",
+  "name": "ReactMapApp",
   "version": "1.0.0",
-  "description": "Simple Node.js based React app",
+  "description": "A simple React mapping application. Utilizes Here maps to display different city maps.",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.13.0",
-    "node-jsx": "^0.13.3",
-    "react": "^0.13.3",
-    "reactify": "^1.1.1"
-  },
-  "browserify": {
-    "transform": [
-      [
-        "reactify",
-        {
-          "es6": true
-        }
-      ]
-    ]
+    "express": "^4.13.0"
   },
   "devDependencies": {},
   "scripts": {
