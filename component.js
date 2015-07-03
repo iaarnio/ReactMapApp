@@ -1,30 +1,53 @@
 /** @jsx React.DOM */
-var isNode = typeof module !== 'undefined' && module.exports;
-var React = isNode ? require('react/addons') : window.React;
+
+var Main = React.createClass({
+  componentDidMount: function () { 
+    mapService.activate();
+  },
+  
+  render: function () {
+    return ( 
+      <div className="container">
+        <MapSelect mapService={mapService}/>
+        <MapDisplay/>
+      </div>
+    );
+  }
+});
+ 
 
 var MapSelect = React.createClass({
-  selectLocation: this.props.selectLocation,
+  getInitialState: function() {
+    return {
+      active: this.props.active
+    };
+  },
+  
+  handleMapSelect: function (e) {
+    // Get an array of DOM elements
+    // Then find which element was clicked
+    var buttons = Array.prototype.slice.call(e.currentTarget.children);
+    var index = buttons.indexOf(e.target);
+
+    this.setState({ active: index });   
+    this.props.mapService.selectMap(index); 
+  },
+  
   render: function () {
-    var locations = data.map(function(loc, index) {
-      return <button className="btn btn-default" id={index} onclick="this.selectLocation()">{loc.name}</button>
-    });
+    var that = this;
+    var locations = this.props.mapService.data.map(function(loc, index) {
+      var button = <button className="btn btn-default" key={index} id={index}>{loc.name}</button>;
+      if (index === this.state.active) {
+        button.props.className += ' active';
+      }
+      return(button);
+    }, this);
 
     return ( 
-      <div>
-        <div>x{this.props.selectLocation}x</div>
-        <div className="btn-group btn-toolbar">
+      <div className="well my-toolbar">
+        <span className="title">React Map App</span>
+        <div className="btn-group btn-toolbar" onClick={this.handleMapSelect}>
           {locations}
-        </div>                
-        
-        <div className="dropdown">
-          <button className="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Select location
-            <span className="caret"></span>
-          </button>
-          <ul className="dropdown-menu" role="menu" aria-labelledby="Select location">
-            <li><a tabIndex="-1" href="#?name=Berlin">Action</a></li>
-            <li><a tabIndex="-1" href="#">Another action</a></li>
-            <li><a tabIndex="-1" href="#">Something else here</a></li>
-          </ul>
         </div>                
       </div>
     );
@@ -34,22 +57,12 @@ var MapSelect = React.createClass({
 
 var MapDisplay = React.createClass({
   render: function () {
-    return <div id="map"/>
+    return (
+      <div id="map"/>
+    );
   }
 });
 
 
-$('body').on('click', '.btn-group button', function (e) {
-  $(this).addClass('active');
-  $(this).siblings().removeClass('active');
-  //Map.selectMap(data[e.currentTarget.id]);
-});
 
- 
-
-if (isNode) {
-  module.exports = {
-    MapSelect: MapSelect,
-    MapDisplay: MapDisplay
-  };
-} 
+React.render(<Main/>, document.getElementById('app'))
