@@ -2,7 +2,7 @@
   "name": "ReactMapApp",
   "version": "1.0.0",
   "description": "A simple React mapping application. Utilizes Here maps to display different city maps.",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
     "express": "^4.13.0"
   },
